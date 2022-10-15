@@ -1,0 +1,24 @@
+name: Build LaTeX document
+on: [push]
+jobs:
+  Build_LaTeX_Resume:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+
+      - name: Compile Resume
+        uses: dante-ev/latex-action@latest
+        with:
+          root_file: resume.tex
+          compiler: pdflatex
+          args: -interaction=nonstopmode -shell-escape
+
+      - name: Commit Resume
+        run: |
+          mv resume.pdf Mercy_Doan_Resume.pdf
+          git config --global user.name "sunyshore/resume"
+          git config --global user.email "intp@dutchmail.com"
+          git add .
+          git commit -m '📄🔨 Generate Resume' || echo
+          git push
